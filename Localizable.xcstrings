@@ -1,0 +1,26 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "HighScore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أعلى نقاط"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HighScore"
+          }
+        }
+      }
+    },
+    "أعلى نقاط : (ScoreGenerator.sharedInstance.getHighscore()) " : {
+
+    }
+  },
+  "version" : "1.0"
+}
