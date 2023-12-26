@@ -58,7 +58,7 @@ class NextStage2to3:SKScene{
 extension NextStage2to3{
     
     func createBGNodes(){
-        for i in 0 ... 2 {
+       
             let bgNode = SKSpriteNode(imageNamed: "NextStage")
             bgNode.name = "background"
             let aspectRatio = bgNode.size.width / bgNode.size.height
@@ -69,7 +69,7 @@ extension NextStage2to3{
             bgNode.zPosition = -1.0
             addChild(bgNode)
             
-        }
+        
     }
     
     func  createGroundNodes(){

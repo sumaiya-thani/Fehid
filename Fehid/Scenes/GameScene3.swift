@@ -241,7 +241,7 @@ extension GameScene3{
         let backgroundImageSize = CGSize(width: 10000, height: 1500)
         
   
-        for i in 0...2 {
+        for i in 0...4 {
             let backGround=SKSpriteNode(imageNamed: "bg4")
             
             backGround.anchorPoint = .zero
@@ -433,7 +433,7 @@ extension GameScene3{
         holeSprite.zPosition = 50.0
          holeSprite.physicsBody!.categoryBitMask = PhysicsCategory.Hole
        // holeSprite.position=CGPoint(x: cameraRec.maxX+holeSprite.frame.width/2.0, y:-200)
-        holeSprite.position = CGPoint(x: cameraRec.maxX - holeSprite.frame.width / 2.0 + 30000, y: -200)
+        holeSprite.position = CGPoint(x: cameraRec.maxX - holeSprite.frame.width / 2.0 + 40000, y: -200)
         holeSprite.physicsBody!.affectedByGravity = false
         holeSprite.physicsBody!.isDynamic = false
          addChild(holeSprite)
@@ -444,7 +444,7 @@ extension GameScene3{
     //obsticales
     func setupObsticales(){
         //first obstacle
-        for i in 1...3{
+        for i in 1...4{
             let sprite=SKSpriteNode(imageNamed: "block-\(i)")
             sprite.name="Block"
             sprite.setScale(0.85)
@@ -740,8 +740,9 @@ extension GameScene3:SKPhysicsContactDelegate {
             let delayAction = SKAction.wait(forDuration: 0.7)
 
                        let transitionAction = SKAction.run {
-                           let scene =  NextStage(size: self.size)
-                           scene.scaleMode = self.scaleMode
+                           let scene =  GameScene(size: self.size)
+                           scene.scaleMode = .aspectFill
+                           scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
                            scene.size = CGSize(width: 2048, height: 1536)
                            self.view?.presentScene(scene, transition: .doorsCloseHorizontal(withDuration: 0.2))
                        }

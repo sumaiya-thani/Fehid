@@ -57,7 +57,7 @@ class NextStage:SKScene{
 extension NextStage{
     
     func createBGNodes(){
-        for i in 0 ... 2 {
+        
             let bgNode = SKSpriteNode(imageNamed: "NextStage")
             bgNode.name = "background"
             bgNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -69,7 +69,7 @@ extension NextStage{
             bgNode.zPosition = -1.0
             addChild(bgNode)
             
-        }
+        
     }
     
     func  createGroundNodes(){
