@@ -433,14 +433,14 @@ extension GameScene3{
     func setupHole(){
         
         // Third obstacle - Hole
-         let holeSprite = SKSpriteNode(imageNamed: "Flag")
+         let holeSprite = SKSpriteNode(imageNamed: "hole")
         holeSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: holeSprite.size.width, height: holeSprite.size.height + 3000))
          holeSprite.name = "Hole"
          holeSprite.setScale(0.20)
         holeSprite.zPosition = 50.0
          holeSprite.physicsBody!.categoryBitMask = PhysicsCategory.Hole
        // holeSprite.position=CGPoint(x: cameraRec.maxX+holeSprite.frame.width/2.0, y:-200)
-        holeSprite.position = CGPoint(x: cameraRec.maxX - holeSprite.frame.width / 2.0 + 10000, y: -130)
+        holeSprite.position = CGPoint(x: cameraRec.maxX - holeSprite.frame.width / 2.0 + 30000, y: -130)
         holeSprite.physicsBody!.affectedByGravity = false
         holeSprite.physicsBody!.isDynamic = false
          addChild(holeSprite)
@@ -762,6 +762,7 @@ extension GameScene3:SKPhysicsContactDelegate {
                 print("Coin")
                 node.removeFromParent()
                 numScore += 1
+                UserDefaults.standard.set(numScore, forKey: "KeyScore")
                 // Update the stored score in UserDefaults
                 ScoreGenerator.sharedInstance.setScore(numScore)
 

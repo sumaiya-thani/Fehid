@@ -239,63 +239,7 @@ extension GameScene2{
         physicsWorld.contactDelegate = self
     }
     
-//    func createProgressBar() {
-//       
-//        // Set the desired grayscale value (from 0.0 to 1.0)
-//        let grayValue: CGFloat = 0.5  // Adjust this value based on your desired shade of gray
-//
-//        // Set the desired alpha (opacity) value (from 0.0 to 1.0)
-//        let alpha: CGFloat = 0.5  // Adjust this value based on your desired opacity
-//
-//        // Create UIColor with gray values and opacity
-//        let customColor = UIColor(white: grayValue, alpha: alpha)
-//
-//           // Create background bar
-//        let backgroundBar = SKSpriteNode(color: UIColor.brown, size: CGSize(width: 800, height: 20))
-//        backgroundBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-//        backgroundBar.position = CGPoint(x: -playableRect.width/2.0 + backgroundBar.frame.width - 150, y:
-//                                        playableRect.height/2.0 - backgroundBar.frame.height/2.0+350)
-//        backgroundBar.zPosition=50.0
-//       
-//        
-//        camerNode.addChild(backgroundBar)
-//           
-//           // Create progress bar
-//        progressBar = SKSpriteNode(color: UIColor.white, size: CGSize(width: 800, height: 20))
-//        
-//           progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-//        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-//        progressBar.position = CGPoint(x: -playableRect.width/2.0 + progressBar.frame.width - 150, y:
-//                                        playableRect.height/2.0 - progressBar.frame.height/2.0+350)
-//        
-//        progressBar.zPosition=50.0
-//     
-//        camerNode.addChild(progressBar)
-//       }
-//       
-//    func updateProgressBar() {
-//        let action = SKAction.scaleX(to: progressValue, duration: 1.0)
-//        progressBar.run(action)
-//    }
-//    
-//       
-//    func increaseProgress() {
-//        // Calculate the distance between the player and the hole
-//        let playerX = player.position.x
-//        let holeX = holeSprite.position.x
-//        let distance = max(0, holeX - playerX)
-//
-//        // Map the distance to a progress value between 0 and 1
-//        let maxDistance = 40000  // Adjust this value based on your scene
-//        progressValue = 1.0 - min(1.0, CGFloat(distance) / CGFloat(maxDistance))
-//
-//        // Update the progress bar
-//        updateProgressBar()
-//    }
-//       
-//    
-    
-    
+
     
     
     
@@ -856,7 +800,7 @@ extension GameScene2:SKPhysicsContactDelegate {
                 node.removeFromParent()
                 numScore += 1
                 
-                
+                UserDefaults.standard.set(numScore, forKey: "KeyScore")
                 // Update the stored score in UserDefaults
                 ScoreGenerator.sharedInstance.setScore(numScore)
 
