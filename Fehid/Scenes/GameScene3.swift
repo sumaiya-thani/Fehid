@@ -146,6 +146,10 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
     override func didMove(to view: SKView) {
         SetupNodes()
         
+        numScore = ScoreGenerator.sharedInstance.getScore()
+
+              // Update the score label on the screen
+              updateScoreLabel()
         
        
         
@@ -701,7 +705,9 @@ extension GameScene3{
             // Set gameOver back to false to avoid re-creating the overlay in the next update
             gameOver = false
         }
-    
+    func updateScoreLabel() {
+        scoreLable.text = "\(numScore)"
+    }
     
     
 
@@ -782,9 +788,7 @@ extension GameScene3:SKPhysicsContactDelegate {
         default :break
             
         }
-        func updateScoreLabel() {
-            scoreLable.text = "\(numScore)"
-        }
+        
     }
 }
 
