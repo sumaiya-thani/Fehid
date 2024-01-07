@@ -13,11 +13,11 @@ class Story1 : SKScene {
     override func didMove(to view: SKView) {
         // Set a fixed size or calculate it based on the device's screen size
               let fixedSize = CGSize(width: 2048, height: 1536) // Set your desired width and height
-
+    
               // Set the scene size
               self.size = fixedSize
         
-        addNextLabel()
+       // addNextLabel()
         setupBG() 
         
       

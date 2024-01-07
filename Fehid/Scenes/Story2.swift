@@ -19,7 +19,7 @@ class Story2 : SKScene {
               // Set the scene size
               self.size = fixedSize
         
-        addNextLabel()
+        //addNextLabel()
         setupBG()
         
       
@@ -57,18 +57,18 @@ extension Story2{
         
     }
     
-    func addNextLabel() {
-            // Create a label node
-            let nextLabel = SKLabelNode(text: "متابعه ")
-            nextLabel.fontSize = 50
-            nextLabel.fontColor = SKColor.white
-        
-        nextLabel.position = CGPoint(x: self.size.width / 2+700, y: self.size.height / 2 - 300)
-        nextLabel.zPosition = 15
-            
-            // Add the label node to the scene
-            addChild(nextLabel)
-        }
+//    func addNextLabel() {
+//            // Create a label node
+//            let nextLabel = SKLabelNode(text: "متابعه ")
+//            nextLabel.fontSize = 50
+//            nextLabel.fontColor = SKColor.white
+//        
+//        nextLabel.position = CGPoint(x: self.size.width / 2+700, y: self.size.height / 2 - 300)
+//        nextLabel.zPosition = 15
+//            
+//            // Add the label node to the scene
+//            addChild(nextLabel)
+//        }
     func goToNextScene() {
             // Create the next scene
             let nextScene = Story3(size: size)

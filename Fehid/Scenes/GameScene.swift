@@ -18,7 +18,8 @@ class GameScene: SKScene {
     var ground:SKSpriteNode!
     var player:SKSpriteNode!
     var playerTextures: [SKTexture] = []
-    
+    var snakeTextures : [SKTexture] = []
+    let holeSprite = SKSpriteNode(imageNamed: "hole")
     var obstacle:[SKSpriteNode]=[]
     var obstacleTextures: [SKTexture] = []
     //Camera
@@ -48,6 +49,10 @@ class GameScene: SKScene {
     var containerNode=SKNode()
     
     //end start pauss
+    
+    //prograss
+    var progressBar: SKSpriteNode!
+       var progressValue: CGFloat = 0.0
     
     //Sounds
     
@@ -111,7 +116,10 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
         lastUpdateTime=currentTime
         moveCamera()
         movePlayer()
-        
+      
+           
+        //increaseProgress()
+
         //movming
         velocityY += gravity
         player.position.y -= velocityY
@@ -222,10 +230,77 @@ extension GameScene{
         setupLife()
         setupScore()
         setupPause()
-        
-        
+       // createProgressBar()
+       // updateProgressBar()
+       
+     
     }
-    //set up physics
+    
+    
+   
+            
+            
+    
+    
+    // MARK: - Prograss bar
+    
+    
+    
+    
+//    func createProgressBar() {
+//       
+//        // Set the desired grayscale value (from 0.0 to 1.0)
+//        let grayValue: CGFloat = 0.5  // Adjust this value based on your desired shade of gray
+//
+//        // Set the desired alpha (opacity) value (from 0.0 to 1.0)
+//        let alpha: CGFloat = 0.5  // Adjust this value based on your desired opacity
+//
+//        // Create UIColor with gray values and opacity
+//       
+//
+//           // Create background bar
+//        let backgroundBar = SKSpriteNode(color: UIColor.brown, size: CGSize(width: 800, height: 10))
+//        backgroundBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        backgroundBar.position = CGPoint(x: -playableRect.width/2.0 + backgroundBar.frame.width - 150, y:
+//                                        playableRect.height/2.0 - backgroundBar.frame.height/2.0+350)
+//        backgroundBar.zPosition=50.0
+//       
+//        
+//        camerNode.addChild(backgroundBar)
+//           
+//           // Create progress bar
+//        progressBar = SKSpriteNode(color: UIColor.white, size: CGSize(width: 800, height: 10))
+//        
+//           progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        progressBar.position = CGPoint(x: -playableRect.width/2.0 + progressBar.frame.width - 150, y:
+//                                        playableRect.height/2.0 - progressBar.frame.height/2.0+350)
+//        
+//        progressBar.zPosition=50.0
+//     
+//        camerNode.addChild(progressBar)
+//       }
+//       
+//    func updateProgressBar() {
+//        let action = SKAction.scaleX(to: progressValue, duration: 1.0)
+//        progressBar.run(action)
+//    }
+//    
+//       
+//    func increaseProgress() {
+//        // Calculate the distance between the player and the hole
+//        let playerX = player.position.x
+//        let holeX = holeSprite.position.x
+//        let distance = max(0, holeX - playerX)
+//
+//        // Map the distance to a progress value between 0 and 1
+//        let maxDistance = 40000  // Adjust this value based on your scene
+//        progressValue = 1.0 - min(1.0, CGFloat(distance) / CGFloat(maxDistance))
+//
+//        // Update the progress bar
+//        updateProgressBar()
+//    }
+//       
     
     func setupPhysics(){
         
@@ -235,27 +310,7 @@ extension GameScene{
     
     
     
-    func createBGFull() {
-        let imageNames = ["Untitled_Artwork 6", "fullBackground", "bg4"]
-        
-        for i in 0..<imageNames.count {
-            let backgroundImageSize = CGSize(width: 10000, height: 1500)
-            
-           
-            
-            let backGround = SKSpriteNode(imageNamed: imageNames[i])
-            
-            backGround.anchorPoint = .zero
-            
-            backGround.position = CGPoint(x: CGFloat(i) * backgroundImageSize.width - backgroundImageSize.width / 2,
-                                          y: -backgroundImageSize.height / 3)
-            
-            backGround.zPosition = -1.0
-            backGround.name = "Background"
-            
-            addChild(backGround)
-        }
-    }
+    
     
     
     
@@ -463,7 +518,8 @@ extension GameScene{
 //        camerNode.position=CGPoint(x: camerNode.position.x+amountToMove.x, y: camerNode.position.y+amountToMove.y)
         camerNode.position+=amountToMove
         
-        
+     //moving the ground inside of the camera
+
         
         enumerateChildNodes(withName: "Background"){
             (node,_) in
@@ -500,11 +556,11 @@ extension GameScene{
         
     }
 
-    
+
     func setupHole(){
         
         // Third obstacle - Hole
-         let holeSprite = SKSpriteNode(imageNamed: "hole")
+      
         holeSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: holeSprite.size.width, height: holeSprite.size.height ))
          holeSprite.name = "Hole"
          holeSprite.setScale(0.85)
@@ -518,7 +574,7 @@ extension GameScene{
        addGroundParticles(parentNode: holeSprite)
         
     }
-    
+ // MARK: -   obstacle
     //obsticales
     func setupObsticales(){
         //first obstacle
@@ -530,32 +586,54 @@ extension GameScene{
             obstacle.append(sprite)
         }
         //second obstacle
-//        
-//        for i in 1...2{
-//            let sprite=SKSpriteNode(imageNamed: "obstacle-\(i)")
-//            sprite.physicsBody=SKPhysicsBody(circleOfRadius: 0.90)
-//            sprite.name="Obstacle"
-//            sprite.setScale(0.20)
-//            obstacle.append(sprite)
-//        }
-//        
-        for i in 1...2 {
-            let sprite = SKSpriteNode(imageNamed: "obstacle-\(i)")
+        
+        
+        for _ in 1...2 {
+            let sprite = SKSpriteNode(imageNamed: "obstacle-2")
             sprite.physicsBody = SKPhysicsBody(circleOfRadius: 0.90)
             sprite.name = "Obstacle"
             
-            if i == 2 {
-                // Apply a different scale for obstacle-2
-                sprite.setScale(0.60)
-            } else {
-                // Set a default scale for other obstacles
-                sprite.setScale(0.16)
-                
-            }
+            
+            sprite.setScale(0.60)
+            
             
             obstacle.append(sprite)
         }
+        //snake
+        // Load snake textures
+        for i in 1...3 {
+            let texture = SKTexture(imageNamed: "snake-\(i)")
+            snakeTextures.append(texture)
+            
+            let snakeAnimation = SKAction.animate(with: snakeTextures, timePerFrame: 0.1)
+            
+            let  sprite = SKSpriteNode(texture: snakeTextures.first)
+            sprite.name = "Snake"
+            sprite.setScale(0.15)
+            sprite.physicsBody = SKPhysicsBody(circleOfRadius: 0.50)
+            
+            sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            sprite.zPosition = 5.0
+            sprite.position = CGPoint(x: camera!.frame.maxX + sprite.frame.width / 2.0, y: -180)
+            
+            sprite.physicsBody?.affectedByGravity = false
+            sprite.physicsBody?.isDynamic = false
+            
+            sprite.physicsBody?.categoryBitMask = PhysicsCategory.Obstacle
+            sprite.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+            
+            obstacle.append(sprite)
+            
+            sprite.run(.repeatForever(snakeAnimation))
+            
+        }
         
+        
+        
+       
+        
+        
+    
         
         //allow to add reandomly
         let index=Int(arc4random_uniform(UInt32(obstacle.count-1)))
@@ -701,6 +779,7 @@ extension GameScene{
 
     }
     
+    
     //setup Pause
     func setupPause(){
         pauseNode = SKSpriteNode(imageNamed: "pause")
@@ -778,11 +857,7 @@ extension GameScene{
             // Add the overlay as a child of the scene
             self.addChild(overlay)
 
-            // Additional code to handle other game over actions
-            // For example, displaying a game over label or restarting the game
-            // ...
-
-            // Set gameOver back to false to avoid re-creating the overlay in the next update
+          
             gameOver = false
         }
     
@@ -800,7 +875,7 @@ extension GameScene:SKPhysicsContactDelegate {
         case PhysicsCategory.Block:
             //increae the speed of tyhe camera
             cameraMovePointPerSecound += 150.0
-            numScore -= 1
+            //numScore -= 1
             if numScore <= 0 {numScore=0}
             scoreLable.text = "\(numScore)"
             run(soundCollison)
@@ -841,9 +916,12 @@ extension GameScene:SKPhysicsContactDelegate {
                 node.removeFromParent()
                 numScore += 1
                 scoreLable.text = "\(numScore)"
+              
+                UserDefaults.standard.set(numScore, forKey: "KeyScore")
                 
+                //increaseProgress()
                 if numScore % 5 == 0 {
-                    cameraMovePointPerSecound += 100.0
+                    cameraMovePointPerSecound += 150.0
                 }
                 
                 //score

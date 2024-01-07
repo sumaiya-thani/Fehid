@@ -18,7 +18,7 @@ class Story3 : SKScene {
               // Set the scene size
               self.size = fixedSize
         
-        addNextLabel()
+        //addNextLabel()
         setupBG()
         
       
@@ -70,7 +70,7 @@ extension Story3{
         }
     func goToNextScene() {
             // Create the next scene
-        let scene = GameScene(size: size)
+        let scene = PreGame(size: size)
         scene.scaleMode = .aspectFill
 
         scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)

@@ -19,8 +19,11 @@ class ScoreGenerator{
         
     }
     func getScore() -> Int {
-        return UserDefaults.standard.integer(forKey: ScoreGenerator.KeyHighscore)
+        return UserDefaults.standard.integer(forKey: ScoreGenerator.KeyScore)
     }
+    
+    
+    
     func setHighscore(_ highscore:Int){
         UserDefaults.standard.set(highscore, forKey: ScoreGenerator.KeyHighscore)
     }

@@ -19,7 +19,7 @@ class NextStage:SKScene{
 
               // Set the scene size
               self.size = fixedSize
-        
+        self.scaleMode = .aspectFill 
        
         createBGNodes()
         createGroundNodes()
@@ -56,20 +56,53 @@ class NextStage:SKScene{
 
 extension NextStage{
     
-    func createBGNodes(){
+//    func createBGNodes(){
+//        
+//            let bgNode = SKSpriteNode(imageNamed: "NextStage")
+//            bgNode.name = "background"
+//            bgNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+//            // Set the size based on the aspect ratio
+//            let aspectRatio = bgNode.size.width / bgNode.size.height
+//            bgNode.size = CGSize(width: self.size.width, height: self.size.width / aspectRatio)
+//            
+//            bgNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+//            bgNode.zPosition = -1.0
+//            addChild(bgNode)
+//            
+//        
+//    }
+    
+    func createBGNodes() {
+        let bgNode = SKSpriteNode(imageNamed: "loading-1")
+        bgNode.name = "background"
+        bgNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-            let bgNode = SKSpriteNode(imageNamed: "NextStage")
-            bgNode.name = "background"
-            bgNode.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            // Set the size based on the aspect ratio
-            let aspectRatio = bgNode.size.width / bgNode.size.height
-            bgNode.size = CGSize(width: self.size.width, height: self.size.width / aspectRatio)
-            
-            bgNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
-            bgNode.zPosition = -1.0
-            addChild(bgNode)
-            
+        // Set the size based on the aspect ratio
+        let aspectRatio = bgNode.size.width / bgNode.size.height
+        bgNode.size = CGSize(width: self.size.width, height: self.size.width / aspectRatio )
         
+        bgNode.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2 )
+        bgNode.zPosition = -1.0
+        bgNode.setScale(1.0)
+        
+        addChild(bgNode)
+        
+        // Create a texture array for the animation frames
+        var animationTextures: [SKTexture] = []
+        for i in 1...4 { // Adjust the range based on the number of frames in your animation
+            let textureName = "loading-\(i)"
+            let texture = SKTexture(imageNamed: textureName)
+            animationTextures.append(texture)
+        }
+        
+        // Create an action to animate the background
+        let animationAction = SKAction.animate(with: animationTextures, timePerFrame: 0.3)
+        
+        // Repeat the animation forever
+        let repeatAction = SKAction.repeatForever(animationAction)
+        
+        // Run the animation on the background node
+        bgNode.run(repeatAction)
     }
     
     func  createGroundNodes(){

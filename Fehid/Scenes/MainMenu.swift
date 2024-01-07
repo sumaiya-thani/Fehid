@@ -30,9 +30,18 @@ class MainMenu:SKScene{
     //scene.scaleMode = scaleMode
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        guard let touch = touches.first else {return}
-        let node = atPoint(touch.location(in: self))
         
+        
+        
+//        guard let touch = touches.first else {return}
+//        let node = atPoint(touch.location(in: self))
+//        
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let node = atPoint(location)
+//
+//        print("Touched node name: \(node.name ?? "nil")")
+//        print("Touched node position: \(node.position)")
         
         if node.name == "play"{
             
@@ -40,9 +49,7 @@ class MainMenu:SKScene{
             scene.scaleMode = .aspectFill
     
             scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            print("GameScene size:", self.size)
           
-           //
     view!.presentScene(scene)
             
             
@@ -55,6 +62,7 @@ class MainMenu:SKScene{
             
         }else if node.name == "container"{
             containerNode.removeFromParent()
+            
         }else if node.name == "music"{
             let node = node as! SKSpriteNode
             SKTAudio.musicEnabled = !SKTAudio.musicEnabled
@@ -117,26 +125,29 @@ extension MainMenu{
     func setupNodes(){
         let play = SKSpriteNode(imageNamed: "play")
         play.name="play"
-        play.setScale(0.18)
-        play.zPosition = 10.0
-        play.position = CGPoint(x: size.width/2.0 + 400 , y: 790 )
+        play.setScale(0.14)
+        play.zPosition = 20.0
+        play.position = CGPoint(x: size.width/2.0 + 360 , y: 800 )
+       
         //print(play.position.y)
         addChild(play)
         
         let highScore = SKSpriteNode(imageNamed: "highscore")
         highScore.name="highscore"
      
-        highScore.setScale(0.18)
-        highScore.zPosition = 10.0
-        highScore.position = CGPoint(x: size.width/2.0 + 400 , y: size.height/2.0 - 115.0)
+        highScore.setScale(0.14)
+        highScore.zPosition = 20.0
+        highScore.position = CGPoint(x: size.width/2.0 + 360 , y: 650)
+       
         addChild(highScore)
         
         let setting = SKSpriteNode(imageNamed: "setting")
         setting.name="setting"
 
-        setting.setScale(0.18)
-        setting.zPosition = 10.0
-        setting.position = CGPoint(x: size.width/2.0 + 400 , y: size.height/2.0 - 255.0)
+        setting.setScale(0.14)
+        setting.zPosition = 20.0
+        setting.position = CGPoint(x: size.width/2.0 + 360 , y: 500)
+
         addChild(setting)
         
         
@@ -146,6 +157,7 @@ extension MainMenu{
         
         
     }
+    
     
     func setupPanel(){
         setupContainer()
@@ -159,9 +171,9 @@ extension MainMenu{
         )
         //HighScore
         let x = -panel.frame.width/2.0 + 250.0
-        let highscoreLbl = SKLabelNode(fontNamed: "krungthep")
+        let highscoreLbl = SKLabelNode()
        // highscoreLbl.text = "HighScore: \(ScoreGenerator.sharedInstance.getHighscore())"
-        highscoreLbl.text = NSLocalizedString("أعلى نقاط : \(ScoreGenerator.sharedInstance.getHighscore()) ",  comment: "")
+        highscoreLbl.text = NSLocalizedString(" High Score : \(ScoreGenerator.sharedInstance.getHighscore()) ",  comment: "")
         highscoreLbl.horizontalAlignmentMode = .left
         highscoreLbl.fontSize = 80.0
         highscoreLbl.zPosition = 25.0
@@ -170,8 +182,8 @@ extension MainMenu{
         
         //
      
-        let scoreLbl = SKLabelNode(fontNamed: "krungthep")
-        scoreLbl.text = "نقاط: \(ScoreGenerator.sharedInstance.getScore())"
+        let scoreLbl = SKLabelNode()
+        scoreLbl.text = "Score : \(ScoreGenerator.sharedInstance.getScore())"
         scoreLbl.horizontalAlignmentMode = .left
         scoreLbl.fontSize = 80.0
         scoreLbl.zPosition = 25.0

@@ -19,12 +19,12 @@ class GameScene2: SKScene {
     var ground:SKSpriteNode!
     var player:SKSpriteNode!
     var playerTextures: [SKTexture] = []
-    
+    var snakeTextures : [SKTexture] = []
     var obstacle:[SKSpriteNode]=[]
     var obstacleTextures: [SKTexture] = []
     //Camera
     var camerNode = SKCameraNode()
-    var cameraMovePointPerSecound:CGFloat=450.0
+    var cameraMovePointPerSecound:CGFloat=700.0
     var lastUpdateTime:TimeInterval=0.0
     var dt:TimeInterval=0.0
     var isTime:CGFloat = 3.0
@@ -49,7 +49,10 @@ class GameScene2: SKScene {
     var containerNode=SKNode()
     
     //end start pauss
-    
+    //prograss
+    var progressBar: SKSpriteNode!
+       var progressValue: CGFloat = 0.0
+    let holeSprite = SKSpriteNode(imageNamed: "hole")
     //Sounds
     
    var soundCoin = SKAction.playSoundFileNamed("coin.mp3")
@@ -111,7 +114,7 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
         lastUpdateTime=currentTime
         moveCamera()
         movePlayer()
-        
+       // increaseProgress()
         //movming
         velocityY += gravity
         player.position.y -= velocityY
@@ -145,7 +148,10 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
     override func didMove(to view: SKView) {
         SetupNodes()
         
-        
+        numScore = ScoreGenerator.sharedInstance.getScore()
+
+              // Update the score label on the screen
+              updateScoreLabel()
         
         
         //here the background sound
@@ -222,7 +228,8 @@ extension GameScene2{
         setupLife()
         setupScore()
         setupPause()
-        
+        //createProgressBar()
+      //  updateProgressBar()
         
     }
     //set up physics
@@ -232,30 +239,63 @@ extension GameScene2{
         physicsWorld.contactDelegate = self
     }
     
+//    func createProgressBar() {
+//       
+//        // Set the desired grayscale value (from 0.0 to 1.0)
+//        let grayValue: CGFloat = 0.5  // Adjust this value based on your desired shade of gray
+//
+//        // Set the desired alpha (opacity) value (from 0.0 to 1.0)
+//        let alpha: CGFloat = 0.5  // Adjust this value based on your desired opacity
+//
+//        // Create UIColor with gray values and opacity
+//        let customColor = UIColor(white: grayValue, alpha: alpha)
+//
+//           // Create background bar
+//        let backgroundBar = SKSpriteNode(color: UIColor.brown, size: CGSize(width: 800, height: 20))
+//        backgroundBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        backgroundBar.position = CGPoint(x: -playableRect.width/2.0 + backgroundBar.frame.width - 150, y:
+//                                        playableRect.height/2.0 - backgroundBar.frame.height/2.0+350)
+//        backgroundBar.zPosition=50.0
+//       
+//        
+//        camerNode.addChild(backgroundBar)
+//           
+//           // Create progress bar
+//        progressBar = SKSpriteNode(color: UIColor.white, size: CGSize(width: 800, height: 20))
+//        
+//           progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        progressBar.position = CGPoint(x: -playableRect.width/2.0 + progressBar.frame.width - 150, y:
+//                                        playableRect.height/2.0 - progressBar.frame.height/2.0+350)
+//        
+//        progressBar.zPosition=50.0
+//     
+//        camerNode.addChild(progressBar)
+//       }
+//       
+//    func updateProgressBar() {
+//        let action = SKAction.scaleX(to: progressValue, duration: 1.0)
+//        progressBar.run(action)
+//    }
+//    
+//       
+//    func increaseProgress() {
+//        // Calculate the distance between the player and the hole
+//        let playerX = player.position.x
+//        let holeX = holeSprite.position.x
+//        let distance = max(0, holeX - playerX)
+//
+//        // Map the distance to a progress value between 0 and 1
+//        let maxDistance = 40000  // Adjust this value based on your scene
+//        progressValue = 1.0 - min(1.0, CGFloat(distance) / CGFloat(maxDistance))
+//
+//        // Update the progress bar
+//        updateProgressBar()
+//    }
+//       
+//    
     
     
-    
-    func createBGFull() {
-        let imageNames = ["Untitled_Artwork 6", "fullBackground", "bg4"]
-        
-        for i in 0..<imageNames.count {
-            let backgroundImageSize = CGSize(width: 10000, height: 1500)
-            
-           
-            
-            let backGround = SKSpriteNode(imageNamed: imageNames[i])
-            
-            backGround.anchorPoint = .zero
-            
-            backGround.position = CGPoint(x: CGFloat(i) * backgroundImageSize.width - backgroundImageSize.width / 2,
-                                          y: -backgroundImageSize.height / 3)
-            
-            backGround.zPosition = -1.0
-            backGround.name = "Background"
-            
-            addChild(backGround)
-        }
-    }
     
     
     
@@ -451,7 +491,7 @@ extension GameScene2{
     func setupHole(){
         
         // Third obstacle - Hole
-         let holeSprite = SKSpriteNode(imageNamed: "hole")
+         //let holeSprite = SKSpriteNode(imageNamed: "hole")
         holeSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: holeSprite.size.width, height: holeSprite.size.height - 100))
          holeSprite.name = "Hole"
          holeSprite.setScale(0.85)
@@ -493,6 +533,39 @@ extension GameScene2{
             
             obstacle.append(sprite)
         }
+        
+        //snake
+        // Load snake textures
+        for i in  1..<4 {
+            let texture = SKTexture(imageNamed: "snake-\(i)")
+            snakeTextures.append(texture)
+            
+            let snakeAnimation = SKAction.animate(with: snakeTextures, timePerFrame: 0.1)
+            
+            let  sprite = SKSpriteNode(texture: snakeTextures.first)
+            sprite.name = "Snake"
+            sprite.setScale(0.15)
+            sprite.physicsBody = SKPhysicsBody(circleOfRadius: 0.50)
+            
+            sprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            sprite.zPosition = 5.0
+            sprite.position = CGPoint(x: camera!.frame.maxX + sprite.frame.width / 2.0, y: -180)
+            
+            sprite.physicsBody?.affectedByGravity = false
+            sprite.physicsBody?.isDynamic = false
+            
+            sprite.physicsBody?.categoryBitMask = PhysicsCategory.Obstacle
+            sprite.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+            
+            obstacle.append(sprite)
+            
+            sprite.run(.repeatForever(snakeAnimation))
+            
+        }
+        
+        
+        
+       
         
         
         
@@ -629,7 +702,7 @@ extension GameScene2{
                                         playableRect.height/2.0 - lifeNode[0].frame.height/2.0+250)
         camerNode.addChild(coinIcon)
         //scoreLable
-        scoreLable.text = "\(numScore)"
+        scoreLable.text = "\(ScoreGenerator.sharedInstance.getScore())"
         scoreLable.fontSize = 60.0
         scoreLable.horizontalAlignmentMode = .left
         scoreLable.verticalAlignmentMode = .top
@@ -726,7 +799,9 @@ extension GameScene2{
             gameOver = false
         }
     
-    
+    func updateScoreLabel() {
+        scoreLable.text = "\(numScore)"
+    }
     
 
 }
@@ -740,7 +815,7 @@ extension GameScene2:SKPhysicsContactDelegate {
         case PhysicsCategory.Block:
             //increae the speed of tyhe camera
             cameraMovePointPerSecound += 150.0
-            numScore -= 1
+           // numScore -= 1
             if numScore <= 0 {numScore=0}
             scoreLable.text = "\(numScore)"
             run(soundCollison)
@@ -780,7 +855,14 @@ extension GameScene2:SKPhysicsContactDelegate {
                 print("Coin")
                 node.removeFromParent()
                 numScore += 1
-                scoreLable.text = "\(numScore)"
+                
+                
+                // Update the stored score in UserDefaults
+                ScoreGenerator.sharedInstance.setScore(numScore)
+
+                // Update the score label on the screen
+                updateScoreLabel()
+                
                 
                 if numScore % 5 == 0 {
                     cameraMovePointPerSecound += 100.0
@@ -802,5 +884,6 @@ extension GameScene2:SKPhysicsContactDelegate {
         default :break
             
         }
+        
     }
 }

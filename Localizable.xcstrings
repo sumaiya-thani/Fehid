@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    " High Score : (ScoreGenerator.sharedInstance.getHighscore()) " : {
+
+    },
     "HighScore" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -17,9 +20,6 @@
           }
         }
       }
-    },
-    "أعلى نقاط : (ScoreGenerator.sharedInstance.getHighscore()) " : {
-
     }
   },
   "version" : "1.0"

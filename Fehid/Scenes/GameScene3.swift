@@ -19,19 +19,19 @@ class GameScene3: SKScene {
     var ground:SKSpriteNode!
     var player:SKSpriteNode!
     var playerTextures: [SKTexture] = []
-    
+    var dogTextures : [SKTexture] = []
     var obstacle:[SKSpriteNode]=[]
     var obstacleTextures: [SKTexture] = []
     //Camera
     var camerNode = SKCameraNode()
-    var cameraMovePointPerSecound:CGFloat=450.0
+    var cameraMovePointPerSecound:CGFloat=1000.0
     var lastUpdateTime:TimeInterval=0.0
     var dt:TimeInterval=0.0
     var isTime:CGFloat = 3.0
     //Coin + GameOver
     
     var coin:SKSpriteNode!
-    var numScore: Int = 0
+    var numScore: Int = ScoreGenerator.sharedInstance.getScore()
     var gameOver = false
     var life:Int = 3
     var lifeNode:[SKSpriteNode] = []
@@ -112,7 +112,7 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
         moveCamera()
         movePlayer()
         
-        //movming
+        //moving
         velocityY += gravity
         player.position.y -= velocityY
         if player.position.y<playerPosY{
@@ -121,6 +121,7 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
             onGround = true
         }
         
+       
         //here if he touch vthe bounderies
         // here the size is not same
         
@@ -146,7 +147,7 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
         SetupNodes()
         
         
-        
+       
         
         //here the background sound
         SKTAudio.sharedInstance().playBGmusic("Youm-El-Ta2ses-60Sec.mp3")
@@ -196,8 +197,8 @@ var soundJump = SKAction.playSoundFileNamed("jump.wav")
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        if velocityY < -12.5 {
-            velocityY = -12.5
+        if velocityY < -25.0 {
+            velocityY = -30.5
         }
     }
 
@@ -241,7 +242,7 @@ extension GameScene3{
         let backgroundImageSize = CGSize(width: 10000, height: 1500)
         
   
-        for i in 0...4 {
+        for i in 0...6 {
             let backGround=SKSpriteNode(imageNamed: "bg4")
             
             backGround.anchorPoint = .zero
@@ -321,6 +322,8 @@ extension GameScene3{
             parentNode.addChild(groundDust)
         }
     }
+    
+    
     
     func createPlayer(){
         
@@ -426,14 +429,14 @@ extension GameScene3{
     func setupHole(){
         
         // Third obstacle - Hole
-         let holeSprite = SKSpriteNode(imageNamed: "hole")
-        holeSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: holeSprite.size.width, height: holeSprite.size.height - 100))
+         let holeSprite = SKSpriteNode(imageNamed: "Flag")
+        holeSprite.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: holeSprite.size.width, height: holeSprite.size.height + 3000))
          holeSprite.name = "Hole"
-         holeSprite.setScale(0.85)
+         holeSprite.setScale(0.20)
         holeSprite.zPosition = 50.0
          holeSprite.physicsBody!.categoryBitMask = PhysicsCategory.Hole
        // holeSprite.position=CGPoint(x: cameraRec.maxX+holeSprite.frame.width/2.0, y:-200)
-        holeSprite.position = CGPoint(x: cameraRec.maxX - holeSprite.frame.width / 2.0 + 40000, y: -200)
+        holeSprite.position = CGPoint(x: cameraRec.maxX - holeSprite.frame.width / 2.0 + 10000, y: -130)
         holeSprite.physicsBody!.affectedByGravity = false
         holeSprite.physicsBody!.isDynamic = false
          addChild(holeSprite)
@@ -448,27 +451,24 @@ extension GameScene3{
             let sprite=SKSpriteNode(imageNamed: "block-\(i)")
             sprite.name="Block"
             sprite.setScale(0.85)
+            sprite.position = CGPoint(x: camera!.frame.maxX + sprite.frame.width / 2.0, y: -160)
             sprite.physicsBody=SKPhysicsBody(rectangleOf: sprite.size)
             obstacle.append(sprite)
         }
-        //second obstacle
-        for i in 1...2 {
-            let sprite = SKSpriteNode(imageNamed: "obstacle-\(i)")
-            sprite.physicsBody = SKPhysicsBody(circleOfRadius: 0.90)
-            sprite.name = "Obstacle"
-            
-            if i == 2 {
-                // Apply a different scale for obstacle-2
-                sprite.setScale(0.60)
-            } else {
-                // Set a default scale for other obstacles
-                sprite.setScale(0.16)
-                
-            }
-            
+        //
+
+    
+        
+        for _ in 1...4{
+            let sprite=SKSpriteNode(imageNamed: "obstacleLast-1")
+            sprite.name="Obstacle"
+            sprite.setScale(0.60)
+            sprite.physicsBody=SKPhysicsBody(rectangleOf: CGSize(width: 180, height: 230))
             obstacle.append(sprite)
         }
         
+        
+      
         
         
         
@@ -715,8 +715,8 @@ extension GameScene3:SKPhysicsContactDelegate {
         switch other.categoryBitMask {
         case PhysicsCategory.Block:
             //increae the speed of tyhe camera
-            cameraMovePointPerSecound += 150.0
-            numScore -= 1
+            cameraMovePointPerSecound += 200.0
+            //numScore -= 1
             if numScore <= 0 {numScore=0}
             scoreLable.text = "\(numScore)"
             run(soundCollison)
@@ -724,7 +724,7 @@ extension GameScene3:SKPhysicsContactDelegate {
             print("Block")
             
         case PhysicsCategory.Obstacle:
-            print("Obstacle")
+            print("obstacle")
             setupGameOver()
             
             
@@ -756,10 +756,14 @@ extension GameScene3:SKPhysicsContactDelegate {
                 print("Coin")
                 node.removeFromParent()
                 numScore += 1
-                scoreLable.text = "\(numScore)"
+                // Update the stored score in UserDefaults
+                ScoreGenerator.sharedInstance.setScore(numScore)
+
+                // Update the score label on the screen
+                updateScoreLabel()
                 
                 if numScore % 5 == 0 {
-                    cameraMovePointPerSecound += 100.0
+                    cameraMovePointPerSecound += 150.0
                 }
                 
                 //score
@@ -777,6 +781,9 @@ extension GameScene3:SKPhysicsContactDelegate {
            
         default :break
             
+        }
+        func updateScoreLabel() {
+            scoreLable.text = "\(numScore)"
         }
     }
 }
